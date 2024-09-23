@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flor Amarilla y Fotos Aleatorias</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #121212; /* Color de fondo oscuro */
+            color: white; /* Color del texto */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flor {
+            width: 50px; /* Tamaño del círculo */
+            height: 50px; /* Tamaño del círculo */
+            background-color: yellow;
+            border-radius: 50%;
+            position: absolute;
+            animation: mover 2s infinite alternate;
+            cursor: pointer;
+            display: flex; /* Para centrar el texto */
+            justify-content: center; /* Para centrar el texto */
+            align-items: center; /* Para centrar el texto */
+            font-weight: bold; /* Estilo del texto */
+        }
+
+        .foto-container {
+            position: absolute;
+            border: 2px solid #333; /* Cuadro alrededor de la imagen */
+            border-radius: 8px; /* Bordes redondeados */
+            overflow: hidden; /* Esconde cualquier parte que se salga del cuadro */
+        }
+
+        .foto {
+            width: 200px; /* Tamaño de la imagen */
+            height: auto; /* Mantener la relación de aspecto */
+            display: block; /* Para que no haya espacio extra */
+        }
+
+        @keyframes mover {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <audio id="fondoMusical" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+
+        Tu navegador no soporta audio.
+    </audio>
+
+    <script>
+        const imagenes = [
+            'image/foto1.jpg',
+            'image/Foto2.jpg',
+            'image/foto3.jpg',
+            'image/foto4.jpg',
+            'image/foto5.jpg',
+            'image/foto6.jpg',
+            'image/foto7.jpg',
+            'image/foto8.jpg',
+            'image/foto9.jpg',
+            'image/foto10.jpg',
+            'image/foto11.jpg',
+            'image/foto12.jpg',
+            'image/foto13.jpg',
+            'image/foto14.jpg',
+            'image/foto15.jpg'
+        ];
+
+        function crearFlor(x, y) {
+            const flor = document.createElement('div');
+            flor.classList.add('flor');
+            flor.style.left = x + 'px';
+            flor.style.top = y + 'px';
+            flor.textContent = "Tócame"; // Texto dentro del círculo
+            document.body.appendChild(flor);
+
+            flor.addEventListener('click', function(event) {
+                event.stopPropagation(); // Evita que se llame el evento en el body
+
+                // Reproducir la música de fondo al hacer clic
+                const audio = document.getElementById('fondoMusical');
+                audio.currentTime = 0; // Reiniciar audio
+                audio.play().catch(error => {
+                    console.log("Error al intentar reproducir la música: ", error);
+                });
+
+                // Seleccionar una imagen aleatoria
+                const randomIndex = Math.floor(Math.random() * imagenes.length);
+                const fotoContainer = document.createElement('div');
+                fotoContainer.classList.add('foto-container');
+
+                const foto = document.createElement('img');
+                foto.src = imagenes[randomIndex];
+                foto.classList.add('foto');
+
+                fotoContainer.appendChild(foto);
+
+                // Calcular posición aleatoria para la imagen
+                const maxX = window.innerWidth - 200; // Resta el ancho de la imagen
+                const maxY = window.innerHeight - 200; // Resta la altura de la imagen
+                fotoContainer.style.left = (Math.random() * maxX) + 'px';
+                fotoContainer.style.top = (Math.random() * maxY) + 'px';
+                
+                document.body.appendChild(fotoContainer);
+
+                // Eliminar la foto después de 3 segundos
+                setTimeout(() => {
+                    fotoContainer.remove();
+                }, 3000);
+            });
+        }
+
+        // Crear la flor amarilla inicial en el centro de la pantalla
+        crearFlor(window.innerWidth / 2 - 25, window.innerHeight / 2 - 25);
+    </script>
+
+    <!-- Botón para reproducir música manualmente (opcional) -->
+    <button id="playAudio" style="position: absolute; top: 10px; left: 10px;">Reproducir Música</button>
+
+    <script>
+        document.getElementById('playAudio').addEventListener('click', function() {
+            const audio = document.getElementById('fondoMusical');
+            audio.currentTime = 0; // Reiniciar audio
+            audio.play().catch(error => {
+                console.log("Error al intentar reproducir la música: ", error);
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+
